@@ -27,14 +27,13 @@ $(document).ready(function() {
         if ($("#newProcess").prop("checked")) {
             if (!$('#processName').val()) isStoreFormValid = false;
             if (!$('#processSource').val()) isStoreFormValid = false;
-            if ($('#parentProcessList').val() == 'none') isStoreFormValid = false;
+        } else {
+            if ($('#existingProcessList').val() == 'none') isStoreFormValid = false;
         }
 
         if (!$('#modelFile').val()) isStoreFormValid = false;
-
-        /*if (!$("#openModel").prop("checked") && !$("#grantAccess").prop("checked")) {
-            isStoreFormValid = false;
-        }*/
+        if (!$('#modelReport').val()) isStoreFormValid = false;
+        if (!$('#modelImage').val()) isStoreFormValid = false;
 
         if (isStoreFormValid) {
             $('#storeFormError').hide();
@@ -44,10 +43,8 @@ $(document).ready(function() {
 
             var id = new Date().getTime();
 
-            console.log(id);
-
             if ($("#newProcess").prop("checked")) {
-                $.get('http://localhost:8081/api.bpm-repo/storeProcess.php',
+                $.get('http://localhost:8081/bpm-repo/api/storeProcess.php',
                     {
                         'processId' : id,
                         'processName' : $('#processName').val(),
@@ -58,25 +55,25 @@ $(document).ready(function() {
                     }
                 );
 
-                $.get('http://localhost:8081/api.bpm-repo/storeProcess.php',
+                $.get('http://localhost:8081/bpm-repo/api/storeModel.php',
                     {
                         'modelId' : id,
                         'relatedProcess' : id,
                         'modelType' : $('#modelType').val(),
-                        'modelFile' : $('#modelFile').val(),
-                        'modelReport' : $('#modelReport').val(),
-                        'modelImage' : $('#modelImage').val()
+                        'modelFile' : document.getElementById("modelFile").files[0].name,
+                        'modelReport' : document.getElementById("modelReport").files[0].name,
+                        'modelImage' : document.getElementById("modelImage").files[0].name
                     }
                 );
             } else {
-                $.get('http://localhost:8081/api.bpm-repo/storeProcess.php',
+                $.get('http://localhost:8081/bpm-repo/api/storeModel.php',
                     {
                         'modelId' : id,
                         'relatedProcess' : $('#existingProcessList').val(),
                         'modelType' : $('#modelType').val(),
-                        'modelFile' : $('#modelFile').val(),
-                        'modelReport' : $('#modelReport').val(),
-                        'modelImage' : $('#modelImage').val()
+                        'modelFile' : document.getElementById("modelFile").files[0].name,
+                        'modelReport' : document.getElementById("modelReport").files[0].name,
+                        'modelImage' : document.getElementById("modelImage").files[0].name
                     }
                 );
             }
@@ -84,68 +81,6 @@ $(document).ready(function() {
             $('#storeFormError').show();
         }
     });
-
-    $('#openModel').click(function() {
-        $('#grantRolesSection').hide();
-    });
-
-    $('#grantAccess').click(function() {
-        $('#grantRolesSection').show();
-    });
-
-    /*$('#addUserReadModel').click(function() {
-        var userName = $('#grantUserField').val();
-        var isValid = true;
-        if (!userName) isValid = false;
-
-        if (grantedUsers.indexOf(userName + '-r') == -1) {
-            if (isValid) {
-                $.get('https://api.github.com/search/users?q=' + userName, function(data) {
-                    if (data.total_count == 1) {
-                        $('#grantUserError').hide();
-                        grantedUsers.push(userName + '-r');
-                        $('#grantUsersList').append('<a class="btn btn-default btn-xs" onclick="var index = grantedUsers.indexOf(\'' +
-                            userName + '-r\'); grantedUsers.splice(index, 1); this.parentNode.removeChild(this);">' +
-                            userName + ' &#9747</a> ');
-                        $('#grantUserField').val('');
-                    } else {
-                        $('#grantUserError').show();
-                    }
-                });
-            } else {
-                $('#grantUserError').show();
-            }
-        } else {
-            $('#grantUserError').hide();
-        }
-    });
-
-    $('#addUserWriteModel').click(function() {
-        var userName = $('#grantUserField').val();
-        var isValid = true;
-        if (!userName) isValid = false;
-
-        if (grantedUsers.indexOf(userName + '-w') == -1) {
-            if (isValid) {
-                $.get('https://api.github.com/search/users?q=' + userName, function(data) {
-                    if (data.total_count == 1) {
-                        $('#grantUserError').hide();
-                        grantedUsers.push(userName + '-w');
-                        $('#grantUsersList').append('<a class="btn btn-primary btn-xs" onclick="var index = grantedUsers.indexOf(\'' +
-                            userName + '-w\'); grantedUsers.splice(index, 1); this.parentNode.removeChild(this);">' +
-                            userName + ' &#9747</a> ');
-                        $('#grantUserField').val('');
-                    } else {
-                        $('#grantUserError').show();
-                    }
-                });
-            } else {
-                $('#grantUserError').show();
-            }
-        } else {
-            $('#grantUserError').hide();
-        }
-    });*/
 });
 
 var app = angular.module("storePage", []);
