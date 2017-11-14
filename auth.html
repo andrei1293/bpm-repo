@@ -1,0 +1,28 @@
+<DOCTYPE html>
+<html>
+<head>
+    <title>User Authentication</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body class="col-md-4 col-md-offset-4">
+    <h2>User Authentication</h2>
+    <p>Please input your user name for remote Git reporitory.</p>
+    <p>Configure the author name and email address to be used with your commits:</p>
+    <blockquote class="blockquote-reverse">
+        <p><small><kbd>git config --global user.name "username"</kbd></small></p>
+        <p><small><kbd>git config --global user.email useremail@example.com</kbd></small></p>
+    </blockquote>
+    <form>
+        <div class="form-group">
+            <label for="userName">User name</label>
+            <input type="text" class="form-control" id="userName" placeholder="User name">
+        </div>
+        <p class="bg-danger" id="authError">Invalid user name.</p>
+        <p class="bg-warning" id="authWarning">There is no user with that name in a remote repository.
+            Please <a href="main.html">click here</a> to use Process Model Repository locally.</p>
+        <button type="button" class="btn btn-success btn-block" id="authButton">Authenticate</button>
+    </form>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="script/auth.js"></script>
+</html>

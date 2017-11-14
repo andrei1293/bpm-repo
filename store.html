@@ -1,0 +1,118 @@
+<DOCTYPE html>
+<html>
+<head>
+    <title>Process Model Storing</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body class="col-md-6 col-md-offset-3" ng-app="storePage" ng-controller="storePageController">
+    <h2>Process Model Storing</h2>
+    <a href="main.html" role="button">Back</a>
+    <p>Use this form to store your business process model.</p>
+    <p class="bg-success" id="storeFormSubmit">Process model has been stored.</p>
+    <div id="afterStoring">
+        <p>After storing model, please commit and push changes to your remote repository, so others can use it:</p>
+        <blockquote class="blockquote-reverse">
+            <p><small><kbd>git add .</kbd></small></p>
+            <p><small><kbd>git commit -m "Commit message"</kbd></small></p>
+            <p><small><kbd>git push --all origin</kbd></small></p>
+        </blockquote>
+    </div>
+    <form id="storeModelForm">
+        <div class="radio">
+            Select process <span class="text-danger">*</span>
+            <label>
+                <input type="radio" name="setModelProcess" id="newProcess" value="newProcess"> Create new process
+            </label>
+            <label>
+                <input type="radio" name="setModelProcess" id="existingProcess" value="existingProcess"> Add model to existing process
+            </label>
+        </div>
+        <div id="existingProcessSection">
+            <div class="form-group">
+                <label for="existingProcessList">Select existing process</label> <span class="text-danger">*</span>
+                <select class="form-control" id="existingProcessList">
+                    <option ng-repeat="x in processes" value="{{x.proccessId}}">{{x.processName}}</option>
+                </select>
+            </div>
+        </div>
+        <div id="newProcessSection">
+            <div class="form-group">
+                <label for="processName">Process name</label> <span class="text-danger">*</span>
+                <input type="text" class="form-control" id="processName" placeholder="Process name">
+            </div>
+            <div class="form-group">
+                <label for="parentProcessList">Parent process</label> <span class="text-danger">*</span>
+                <select class="form-control" id="parentProcessList">
+                    <option ng-repeat="x in processes" value="{{x.proccessId}}">{{x.processName}}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="processIndustry">Process industry</label> <span class="text-danger">*</span>
+                <select class="form-control" id="processIndustry">
+                    <option ng-repeat="x in processIndustry" value="{{x.processIndustryId}}">{{x.processIndustryName}}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="processSource">Process source</label> <span class="text-danger">*</span>
+                <input type="text" class="form-control" id="processSource" placeholder="Process source">
+            </div>
+            <div class="form-group">
+                <label for="processDescription">Process description</label>
+                <textarea class="form-control" id="processDescription" placeholder="Process description" rows="3"></textarea>
+            </div>
+        </div>
+        <div id="storeModelSection">
+            <div class="form-group">
+                <label for="modelType">Process model type</label> <span class="text-danger">*</span>
+                <select class="form-control" id="modelType">
+                    <option ng-repeat="x in modelType" value="{{x.modelTypeId}}">{{x.modelTypeName}}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="modelFile">Process model file</label> <span class="text-danger">*</span>
+                <input type="file" class="form-control" id="modelFile" placeholder="Process model file">
+            </div>
+            <div class="form-group">
+                <label for="modelReport">Process model report</label>
+                <input type="file" class="form-control" id="modelReport" placeholder="Process model report">
+            </div>
+            <div class="form-group">
+                <label for="modelImage">Process model image</label>
+                <input type="file" class="form-control" id="modelImage" placeholder="Process model image">
+            </div>
+            <!--<div class="radio">
+                Model access <span class="text-danger">*</span>
+                <label>
+                    <input type="radio" name="setModelAccess" id="openModel" value="openModel"> Open access
+                </label>
+                <label>
+                    <input type="radio" name="setModelAccess" id="grantAccess" value="grantAccess"> Grant access
+                </label>
+            </div>
+            <div class="form-group" id="grantRolesSection">
+                <form>
+                    <div class="form-group">
+                        <label for="grantUserField">Granted users</label> <span class="text-danger">*</span>
+                        <div class="form-group" id="grantUsersList">
+                            <script>
+                            var grantedUsers = ['andrei1293-r', 'andrei1293-w'];
+                            </script>
+                            <a class="btn btn-default btn-xs disabled" id="andrei1293-r">andrei1293</a>
+                            <a class="btn btn-primary btn-xs disabled" id="andrei1293-w">andrei1293</a>
+                        </div>
+                        <input type="text" class="form-control" id="grantUserField" placeholder="User name">
+                    </div>
+                    <p class="bg-danger" id="grantUserError">There is no user with that name.</p>
+                    <button type="button" class="btn btn-default btn-sm" id="addUserReadModel">Grant read</button>
+                    <button type="button" class="btn btn-primary btn-sm" id="addUserWriteModel">Grant write</button>
+                </form>
+            </div>-->
+            <p class="bg-danger" id="storeFormError">Please fill in all necessary fields.</p>
+            <button type="button" class="btn btn-default" id="storeModelButton">Store process model</button>
+        </div>
+    </form>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+<script src="script/store.js"></script>
+</html>

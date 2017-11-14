@@ -1,0 +1,73 @@
+<DOCTYPE html>
+<html>
+<head>
+    <title>Process Model Search</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body class="col-md-8 col-md-offset-2" ng-app="searchPage" ng-controller="searchPageController">
+    <h2>Process Model Search</h2>
+    <a href="main.html" role="button">Back</a>
+    <p>Use following form to find the process model you need.</p>
+    <form class="form-inline">
+          <div class="form-group">
+              <label class="sr-only" for="processName">Process name</label>
+              <input type="email" class="form-control" id="processName" placeholder="Process name">
+          </div>
+          <div class="form-group">
+              <label for="processIndustry">Industry</label>
+              <select class="form-control" id="processIndustry">
+                  <option ng-repeat="x in processIndustry" value="{{x.processIndustryId}}">{{x.processIndustryName}}</option>
+              </select>
+          </div>
+          <div class="form-group">
+              <label class="sr-only" for="processSource">Process source</label>
+              <input type="password" class="form-control" id="processSource" placeholder="Process source">
+          </div>
+          <div class="form-group">
+              <label for="modelType">Model type</label>
+              <select class="form-control" id="modelType">
+                  <option ng-repeat="x in modelType" value="{{x.modelTypeId}}">{{x.modelTypeName}}</option>
+              </select>
+          </div>
+          <button type="button" class="btn btn-default" id="searchModel" ng-click="searchModel()">Search</button>
+    </form>
+    <div id="storedModelsList">
+        <div id="modelListItem" ng-repeat="model in models">
+            <table class="table table-bordered">
+                <tr>
+                    <td>
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Process name</label>
+                                <div class="col-sm-8">
+                                    <p class="form-control-static"><a href="process.html?processId={{model.processId}}">{{model.processName}}</a></p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Process model type</label>
+                                <div class="col-sm-8">
+                                    <p class="form-control-static">{{model.modelType}}</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Process model file</label>
+                                <div class="col-sm-8">
+                                    <p class="form-control-static"><a href="models/{{model.modelFile}}">{{model.modelFile}}</a></p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">
+                                    <a class="btn btn-default" href="model.html?modelId={{model.modelId}}" role="button">View details</a>
+                                </label>
+                            </div>
+                        </form>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+<script src="script/search.js"></script>
+</html>
