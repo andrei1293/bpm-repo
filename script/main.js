@@ -4,20 +4,13 @@ app.controller("mainPageController", function($scope) {
 
     $.ajax({
         type : 'GET',
-        url : 'http://localhost:8081/api.bpm-repo/models.php',
+        url : 'http://localhost:8081/bpm-repo/api/models.php',
+        dataType : 'json',
         success : function(data) {
             response = data;
         },
         async : false
     });
 
-    $scope.models = [
-        {
-            'processId' : '1',
-            'processName' : 'Supply',
-            'modelType' : 'BPMN',
-            'modelFile' : 'supply.bpmn',
-            'modelId' : '1'
-        }
-    ];
+    $scope.models = response;
 });
