@@ -13,15 +13,54 @@ $(document).ready(function() {
             $('#storedModelsList').hide();
             $('#updateFormSubmit').show();
 
-            $.get('http://api.bpm-repo/updateParentProcess.php',
+            $.get('http://localhost:8081/bpm-repo/api/updateProcess.php',
                 {
                     'processId' : $_GET('processId'),
-                    'parentProcess' : $('#parentProcessList').val()
+                    'parentProcess' : $('#parentProcessList').val(),
+                    'mode' : 'updateParent'
                 }
             );
         } else {
             $('#updateParentProcessError').show();
         }
+    });
+
+    $('#setParentProcessButton').click(function() {
+        var isValid = true;
+
+        if ($('#parentProcessList').val() === 'none') isValid = false;
+
+        if (isValid) {
+            $('#updateParentProcessError').hide();
+            $('#processInfo').hide();
+            $('#storedModelsList').hide();
+            $('#updateFormSubmit').show();
+
+            $.get('http://localhost:8081/bpm-repo/api/updateProcess.php',
+                {
+                    'processId' : $_GET('processId'),
+                    'parentProcess' : $('#parentProcessList').val(),
+                    'mode' : 'setParent'
+                }
+            );
+        } else {
+            $('#updateParentProcessError').show();
+        }
+    });
+
+    $('#removeParentProcess').click(function() {
+        $('#updateParentProcessError').hide();
+        $('#processInfo').hide();
+        $('#storedModelsList').hide();
+        $('#updateFormSubmit').show();
+
+        $.get('http://localhost:8081/bpm-repo/api/updateProcess.php',
+            {
+                'processId' : $_GET('processId'),
+                'parentProcess' : $('#parentProcessList').val(),
+                'mode' : 'removeParent'
+            }
+        );
     });
 });
 
@@ -31,45 +70,57 @@ app.controller("processPageController", function($scope) {
 
     $.ajax({
         type : 'GET',
-        url : 'http://api.bpm-repo/process.php?processId=' + $_GET('processId'),
+        url : 'http://localhost:8081/bpm-repo/api/process.php?processId=' + $_GET('processId'),
+        dataType : 'json',
         success : function(data) {
             response = data;
         },
         async : false
     });
 
-    $scope.processName = 'Supply';
-    $scope.parentProcessId = '1';
-    $scope.parentProcessName = 'Source';
-    $scope.processes = [
-        {
-            'processId' : 'none',
-            'processName' : '---'
+    $scope.processName = response[0].process[0].processName;
+    $scope.parentProcessId = response[0].process[0].parentProcessId;
+    $scope.parentProcessName = response[0].process[0].parentProcessName;
+    $scope.processIndustry = response[0].process[0].processIndustry;
+    $scope.processSource = response[0].process[0].processSource;
+    $scope.processDescription = response[0].process[0].processDescription;
+
+    $scope.childProcesses = response[1].childProcesses;
+    $scope.models = response[2].models;
+
+    if ($scope.childProcesses.length == 0) {
+        $('#childProcessesList').hide();
+    }
+
+    if ($scope.parentProcessId == null) {
+        $('#parentProcessSection').hide();
+        $('#updateParentProcessButton').hide();
+        $('#setParentProcessButton').show();
+        $('#removeParentProcess').hide();
+    } else {
+        $('#parentProcessSection').show();
+        $('#updateParentProcessButton').show();
+        $('#setParentProcessButton').hide();
+        $('#removeParentProcess').show();
+    }
+
+    var processesResponse = null;
+
+    $.ajax({
+        type : 'GET',
+        url : 'http://localhost:8081/bpm-repo/api/metadata.php',
+        dataType : 'json',
+        success : function(data) {
+            processesResponse = data;
         },
-        {
-            'processId' : '1',
-            'processName' : 'Make'
-        },
-        {
-            'processId' : '2',
-            'processName' : 'Deliver'
+        async : false
+    });
+
+    $scope.processes = processesResponse[0].processes;
+
+    for (var x in $scope.processes) {
+        if ($scope.processes[x].processId == $_GET('processId')) {
+            $scope.processes.splice(x, 1);
         }
-    ];
-    $scope.childProcesses = [
-        {
-            'processId' : '1',
-            'processName' : 'Make'
-        },
-        {
-            'processId' : '2',
-            'processName' : 'Deliver'
-        }
-    ]
-    $scope.models = [
-        {
-            'modelType' : 'BPMN',
-            'modelFile' : 'supply.bpmn',
-            'modelId' : '1'
-        }
-    ];
+    }
 });
