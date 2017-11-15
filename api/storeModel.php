@@ -16,4 +16,6 @@ $sql = "insert into process_model (Process_Model_ID, Process_ID, Model_Type_ID,
 $connection->query($sql);
 
 $connection->close();
+
+header('Location: http://localhost:8081/bpm-repo/xpdl2rdf.php');
 ?>
