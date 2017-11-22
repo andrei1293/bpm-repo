@@ -4,7 +4,7 @@ include 'db_connect.php';
 $connection = open_connection();
 
 $processes = array();
-array_push($processes, array('processId' => 'none', 'processName' => '---'));
+array_push($processes, array('processId' => 'none', 'processName' => '--- Select process ---'));
 $sql = 'select Process_ID, Process_Name from process';
 $result = $connection->query($sql);
 while ($row = $result->fetch_assoc()) {
