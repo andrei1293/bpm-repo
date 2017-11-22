@@ -4,61 +4,38 @@ app.controller("searchPageController", function($scope) {
 
     $.ajax({
         type : 'GET',
-        url : 'http://localhost:8081/api.bpm-repo/metadata.php',
+        url : 'http://localhost:8081/bpm-repo/api/metadata.php',
+        dataType : 'json',
         success : function(data) {
             metadata = data;
         },
         async : false
     });
 
-    $scope.processIndustry = [
-        {
-            'processIndustryId' : '1',
-            'processIndustryName' : 'Supply chain'
-        },
-        {
-            'processIndustryId' : '2',
-            'processIndustryName' : 'Manufactory'
-        }
-    ];
-    $scope.modelType = [
-        {
-            'modelTypeId' : '1',
-            'modelTypeName' : 'BPMN'
-        },
-        {
-            'modelTypeId' : '2',
-            'modelTypeName' : 'IDEF0'
-        }
-    ];
+    $scope.processIndustry = metadata[1].industries;
+    $scope.modelType = metadata[2].types;
 
     var models = null;
 
     $.ajax({
         type : 'GET',
-        url : 'http://localhost:8081/api.bpm-repo/models.php',
+        url : 'http://localhost:8081/bpm-repo/api/models.php',
+        dataType : 'json',
         success : function(data) {
             models = data;
         },
         async : false
     });
 
-    $scope.models = [
-        {
-            'processId' : '1',
-            'processName' : 'Supply',
-            'modelType' : 'BPMN',
-            'modelFile' : 'supply.bpmn',
-            'modelId' : '1'
-        }
-    ];
+    $scope.models = models;
 
     $scope.searchModel = function() {
         var results = null;
 
         $.ajax({
             type : 'GET',
-            url : 'http://api.bpm-repo/search.php',
+            url : 'http://localhost:8081/bpm-repo/api/search.php',
+            dataType : 'json',
             data: {
                 'processName' : $('#processName').val(),
                 'processIndustry' : $('#processIndustry').val(),
