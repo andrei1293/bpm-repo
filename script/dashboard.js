@@ -5,28 +5,26 @@ google.charts.setOnLoadCallback(drawLineChart);
 google.charts.setOnLoadCallback(drawGauge);
 
 function drawBarChart() {
-    var response = { };
+    var analysisResult = null;
 
     $.ajax({
         type : 'GET',
-        url : 'http://api.bpm-repo/model.php?modelId=' + $_GET('modelId'),
+        url : 'http://localhost:8081/bpm-repo/api/model.php?modelId=' + $_GET('modelId'),
+        dataType : 'json',
         success : function(data) {
-            response = data;
+            analysisResult = data;
         },
         async : false
     });
 
+    var response = { };
     response.modelMetrics = {
-        'tasks' : 7,
-        'gateways' : 2,
-        'start' : 1,
-        'intermediate' : 2,
-        'end' : 1,
-        'shortcomings' : 2,
-        'conformity' : 73
+        'tasks' : parseInt(analysisResult[1].modelMetrics[0]),
+        'gateways' : parseInt(analysisResult[1].modelMetrics[1]),
+        'start' : parseInt(analysisResult[1].modelMetrics[2]),
+        'intermediate' : parseInt(analysisResult[1].modelMetrics[3]),
+        'end' : parseInt(analysisResult[1].modelMetrics[4])
     };
-
-    console.log(response);
 
     var data = google.visualization.arrayToDataTable([
         ['Metric',              'Value', { role: 'style' }],
@@ -49,31 +47,27 @@ function drawBarChart() {
 }
 
 function drawLineChart() {
-    var response = { };
+    var analysisResult = null;
 
     $.ajax({
         type : 'GET',
-        url : 'http://api.bpm-repo/model.php?modelId=' + $_GET('modelId'),
+        url : 'http://localhost:8081/bpm-repo/api/model.php?modelId=' + $_GET('modelId'),
+        dataType : 'json',
         success : function(data) {
-            response = data;
+            analysisResult = data;
         },
         async : false
     });
 
-    response.designShortcomings = [
-        { 'timestamp' : '09-11-2017 11:23:44', 'shortcomings' : 2 },
-        { 'timestamp' : '09-11-2017 11:55:14', 'shortcomings' : 3 },
-        { 'timestamp' : '09-11-2017 14:03:38', 'shortcomings' : 1 },
-        { 'timestamp' : '10-11-2017 10:05:12', 'shortcomings' : 0 },
-        { 'timestamp' : '10-11-2017 12:25:01', 'shortcomings' : 2 }
-    ];
+    var response = { };
+    response.designShortcomings = analysisResult[2].designShortcomings;
 
     var table = [
         ['Timestamp', 'Design shortcomings']
     ];
 
     for (var x in response.designShortcomings) {
-        table.push([response.designShortcomings[x].timestamp, response.designShortcomings[x].shortcomings]);
+        table.push([response.designShortcomings[x].timestamp, parseInt(response.designShortcomings[x].shortcomings)]);
     }
 
     var data = google.visualization.arrayToDataTable(table);
@@ -90,25 +84,21 @@ function drawLineChart() {
 }
 
 function drawGauge() {
-    var response = { };
+    var analysisResult = null;
 
     $.ajax({
         type : 'GET',
-        url : 'http://api.bpm-repo/model.php?modelId=' + $_GET('modelId'),
+        url : 'http://localhost:8081/bpm-repo/api/model.php?modelId=' + $_GET('modelId'),
+        dataType : 'json',
         success : function(data) {
-            response = data;
+            analysisResult = data;
         },
         async : false
     });
 
+    var response = { };
     response.modelMetrics = {
-        'tasks' : 7,
-        'gateways' : 2,
-        'start' : 1,
-        'intermediate' : 2,
-        'end' : 1,
-        'shortcomings' : 2,
-        'conformity' : 73
+        'conformity' : parseFloat(analysisResult[1].modelMetrics[6])
     };
 
     var data = google.visualization.arrayToDataTable([

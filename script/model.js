@@ -17,10 +17,10 @@ $(document).ready(function() {
             $('#updateFormSubmit').show();
             $('#afterUpdate').show();
 
-            $.get('http://api.bpm-repo/updateModelImage.php',
+            $.get('http://localhost:8081/bpm-repo/api/updateModelImage.php',
                 {
                     'modelId' : $_GET('modelId'),
-                    'modelImage' : $('#modelImage').val()
+                    'modelImage' : document.getElementById("modelImage").files[0].name
                 }
             );
         } else {
@@ -40,10 +40,10 @@ $(document).ready(function() {
             $('#updateFormSubmit').show();
             $('#afterUpdate').show();
 
-            $.get('http://api.bpm-repo/updateModelFile.php',
+            $.get('http://localhost:8081/bpm-repo/api/updateModelFile.php',
                 {
                     'modelId' : $_GET('modelId'),
-                    'modelFile' : $('#modelFile').val()
+                    'modelFile' : document.getElementById("modelFile").files[0].name
                 }
             );
         } else {
@@ -63,10 +63,10 @@ $(document).ready(function() {
             $('#updateFormSubmit').show();
             $('#afterUpdate').show();
 
-            $.get('http://api.bpm-repo/updateModelReport.php',
+            $.get('http://localhost:8081/bpm-repo/api/updateModelReport.php',
                 {
                     'modelId' : $_GET('modelId'),
-                    'modelReport' : $('#modelReport').val()
+                    'modelReport' : document.getElementById("modelReport").files[0].name
                 }
             );
         } else {
@@ -81,27 +81,28 @@ app.controller("modelPageController", function($scope) {
 
     $.ajax({
         type : 'GET',
-        url : 'http://api.bpm-repo/model.php?modelId=' + $_GET('modelId'),
+        url : 'http://localhost:8081/bpm-repo/api/model.php?modelId=' + $_GET('modelId'),
+        dataType : 'json',
         success : function(data) {
             response = data;
         },
         async : false
     });
 
-    $scope.modelImage = 'supply.png';
-    $scope.processId = '1';
-    $scope.processName = 'Supply';
-    $scope.modelType = 'BPMN';
-    $scope.modelFile = 'supply.bpmn';
-    $scope.modelReport = 'supply_report.pdf';
+    $scope.modelImage = response[0].modelInfo[0].modelImage;
+    $scope.processId = response[0].modelInfo[0].processId;
+    $scope.processName = response[0].modelInfo[0].processName;
+    $scope.modelType = response[0].modelInfo[0].modelType;
+    $scope.modelFile = response[0].modelInfo[0].modelFile;
+    $scope.modelReport = response[0].modelInfo[0].modelReport;
     $scope.modelMetrics = {
-        'tasks' : 7,
-        'gateways' : 2,
-        'start' : 1,
-        'intermediate' : 2,
-        'end' : 1,
-        'shortcomings' : 2,
-        'conformity' : 73
+        'tasks' : response[1].modelMetrics[0],
+        'gateways' : response[1].modelMetrics[1],
+        'start' : response[1].modelMetrics[2],
+        'intermediate' : response[1].modelMetrics[3],
+        'end' : response[1].modelMetrics[4],
+        'shortcomings' : response[1].modelMetrics[5],
+        'conformity' : response[1].modelMetrics[6]
     };
     $scope.modelEnhancement = [
         'Task "Example" disconnected from the rest of the process "Example"',
