@@ -1,6 +1,6 @@
 <?php
 include 'api/db_connect.php';
-include 'utils.php';
+include 'api/utils.php';
 
 $id = $_GET['modelId'];
 $file = $_GET['modelFile'];
