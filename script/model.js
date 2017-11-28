@@ -119,13 +119,17 @@ app.controller("modelPageController", function($scope) {
 
     $scope.modelEnhancement = responseRecomm;
 
-    $scope.models = [
-        {
-            'processId' : '1',
-            'processName' : 'Supply',
-            'modelType' : 'BPMN',
-            'modelFile' : 'supply.bpmn',
-            'modelId' : '1'
-        }
-    ];
+    var responseSimilarity = null;
+
+    $.ajax({
+        type : 'GET',
+        url : 'http://localhost:8082/semantic-bpm-repo/api/similarity?modelId=' + $_GET('modelId'),
+        dataType : 'json',
+        success : function(data) {
+            responseSimilarity = data;
+        },
+        async : false
+    });
+
+    $scope.models = responseSimilarity;
 });
