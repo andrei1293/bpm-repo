@@ -5,7 +5,7 @@ $id = $_GET['modelId'];
 $file = $_GET['modelFile'];
 
 $result = shell_exec("XpdlToRdfTool.exe -f $file");
-$metrics = explode(";", $result);
+$metrics = explode(';', $result);
 $event_id = round(microtime(true) * 1000);
 
 $connection = open_connection();
@@ -33,6 +33,15 @@ $csc_percent = 100 * ($csc - $min) / ($max - $min);
 $sql = "insert into process_model_event_metric (Event_ID, Model_Metric_ID, Metric_Value)
     values ('$event_id', '7', '$csc_percent')";
 $connection->query($sql);
+
+$recommendations = explode('+', $metrics[7]);
+$content = '[ "' . $recommendations[0] . '"';
+
+for ($i = 1; $i < count($recommendations) - 1; $i++) {
+    $content = $content . ', "' . $recommendations[$i] . '"';
+}
+
+file_put_contents("api/recommendations/$id", $content . " ]");
 
 $connection->close();
 ?>

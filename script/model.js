@@ -104,10 +104,21 @@ app.controller("modelPageController", function($scope) {
         'shortcomings' : response[1].modelMetrics[5],
         'conformity' : response[1].modelMetrics[6]
     };
-    $scope.modelEnhancement = [
-        'Task "Example" disconnected from the rest of the process "Example"',
-        'Intermediate event "Example" excluded from the process "Example" flow'
-    ];
+
+    var responseRecomm = null;
+
+    $.ajax({
+        type : 'GET',
+        url : 'http://localhost:8081/bpm-repo/api/recommendations.php?modelId=' + $_GET('modelId'),
+        dataType : 'json',
+        success : function(data) {
+            responseRecomm = data;
+        },
+        async : false
+    });
+
+    $scope.modelEnhancement = responseRecomm;
+
     $scope.models = [
         {
             'processId' : '1',
