@@ -1,5 +1,6 @@
 <?php
 include 'db_connect.php';
+include 'utils.php';
 
 $connection = open_connection();
 
@@ -9,14 +10,6 @@ $sql = 'select Process_ID, Process_Name from process';
 $result = $connection->query($sql);
 while ($row = $result->fetch_assoc()) {
     array_push($processes, array('processId' => $row['Process_ID'], 'processName' => $row['Process_Name']));
-}
-
-$industries = array();
-$sql = 'select Process_Industry_ID, Process_Industry_Name from process_industry';
-$result = $connection->query($sql);
-while ($row = $result->fetch_assoc()) {
-    array_push($industries, array('processIndustryId' => $row['Process_Industry_ID'],
-        'processIndustryName' => $row['Process_Industry_Name']));
 }
 
 $types = array();
