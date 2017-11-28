@@ -17,7 +17,6 @@ public class SimilarityServlet extends HttpServlet {
 			throws ServletException, IOException {
 		response.setContentType("application/json");
 		PrintWriter writer = response.getWriter();
-		
 		writer.print("[" + "{" + "\"processId\" : \"1\"," + "\"processName\" : \"Supply\","
 				+ "\"modelType\" : \"BPMN\"," + "\"modelFile\" : \"supply.bpmn\"," + "\"modelId\" : \"1\"" + "}" + "]");
 		writer.close();
