@@ -123,7 +123,7 @@ app.controller("modelPageController", function($scope) {
 
     $.ajax({
         type : 'GET',
-        url : 'http://localhost:8082/semantic-bpm-repo/api/similarity?modelId=' + $_GET('modelId'),
+        url : 'http://localhost:8081/bpm-repo/api/similarity.php?modelId=' + $_GET('modelId'),
         dataType : 'json',
         success : function(data) {
             responseSimilarity = data;
