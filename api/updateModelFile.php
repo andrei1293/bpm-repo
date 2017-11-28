@@ -12,5 +12,5 @@ $sql = "update process_model set Process_Model_File_URL = '$file'
 $connection->query($sql);
 $connection->close();
 
-header("Location: http://localhost:8081/bpm-repo/xpdl2rdf.php?modelId=$id&modelFile=$file");
+header("Location: http://localhost:8081/bpm-repo/xpdl2rdf.php?modelId=$id&modelFile=$file&activity=update");
 ?>
