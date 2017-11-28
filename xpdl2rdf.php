@@ -1,5 +1,6 @@
 <?php
 include 'api/db_connect.php';
+include 'utils.php';
 
 $id = $_GET['modelId'];
 $file = $_GET['modelFile'];
@@ -22,23 +23,13 @@ for ($i = 0; $i < count($metrics) - 2; $i++) {
     $connection->query($sql);
 }
 
-$csc = round(str_replace(',', '.', $metrics[6]), 2);
-$min = -5 - round(str_replace(',', '.', $metrics[0]), 2);
-$max = 0;
-$csc_percent = 100 * ($csc - $min) / ($max - $min);
+$csc_percent = calculate_csc_percent($metrics[6], $metrics[0]);
 
 $sql = "insert into process_model_event_metric (Event_ID, Model_Metric_ID, Metric_Value)
     values ('$event_id', '7', '$csc_percent')";
 $connection->query($sql);
 
-$recommendations = explode('+', $metrics[7]);
-$content = '[ "' . $recommendations[0] . '"';
-
-for ($i = 1; $i < count($recommendations) - 1; $i++) {
-    $content = $content . ', "' . $recommendations[$i] . '"';
-}
-
-file_put_contents("api/recommendations/$id", $content . " ]");
+save_model_recommendations($metrics[7], $id);
 
 $connection->close();
 ?>
