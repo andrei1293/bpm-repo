@@ -17,5 +17,5 @@ $connection->query($sql);
 
 $connection->close();
 
-header('Location: http://localhost:8081/bpm-repo/xpdl2rdf.php');
+header("Location: http://localhost:8081/bpm-repo/xpdl2rdf.php?modelId=$id&modelFile=$file");
 ?>
