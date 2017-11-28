@@ -17,9 +17,6 @@ $connection->query($sql);
 for ($i = 0; $i < count($metrics) - 2; $i++) {
     $metric_id = $i + 1;
     $value = round(str_replace(',', '.', $metrics[$i]), 2);
-
-    echo $value . ' ';
-
     $sql = "insert into process_model_event_metric (Event_ID, Model_Metric_ID, Metric_Value)
         values ('$event_id', '$metric_id', '$value')";
     $connection->query($sql);
