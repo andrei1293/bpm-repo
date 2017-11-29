@@ -23,6 +23,7 @@ public class SimilarityServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String modelId = request.getParameter("modelId");
+		similarityService.defineSimilarModels(modelId);
 		List<ProcessModel> similarModels = similarityService.getSimilarProcessModelsList(modelId);
 		response.setContentType("application/json");
 		PrintWriter writer = response.getWriter();

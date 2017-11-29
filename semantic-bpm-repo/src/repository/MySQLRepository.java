@@ -5,13 +5,15 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 import entity.ProcessModel;
 import entity.ProcessModelSimilarity;
+import properties.Properties;
 
-public class MySQLRepository implements IRepository {
+public class MySQLRepository implements IDatabaseRepository {
 	private static final String HOST = "jdbc:mysql://localhost:3306/bpm-repo";
 	private static final String USER = "root";
 	private static final String PASSWORD = "root";
@@ -39,10 +41,35 @@ public class MySQLRepository implements IRepository {
 	}
 
 	@Override
+	public List<ProcessModel> getProcessModelFiles() {
+		Connection connection = getConnection();
+		List<ProcessModel> processModelFiles = new ArrayList<ProcessModel>();
+		String query = "SELECT Process_Model_File_URL, Process_Model_ID FROM process_model";
+
+		try {
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery(query);
+
+			while (resultSet.next()) {
+				processModelFiles.add(new ProcessModel(resultSet.getString(1), resultSet.getString(2)));
+			}
+
+			resultSet.close();
+			statement.close();
+			connection.close();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+
+		return processModelFiles;
+	}
+
+	@Override
 	public int[] saveSimilarProcessModels(List<ProcessModelSimilarity> similarModels) {
 		Connection connection = getConnection();
 		String query = "INSERT INTO process_model_similarity (Subject_Process_Model_ID, "
-				+ "Object_Process_Model_ID, Process_Model_Similarity_Value) VALUES (?, ?, ?)";
+				+ "Object_Process_Model_ID, Process_Model_Similarity_Value) VALUES (?, ?, ?) "
+				+ "ON DUPLICATE KEY UPDATE Process_Model_Similarity_Value = ?";
 		int[] batchResults = null;
 
 		try {
@@ -50,10 +77,13 @@ public class MySQLRepository implements IRepository {
 			PreparedStatement statement = connection.prepareStatement(query);
 
 			for (ProcessModelSimilarity row : similarModels) {
-				statement.setString(1, row.getSubjectProcessModelId());
-				statement.setString(2, row.getObjectProcessModelId());
-				statement.setDouble(3, row.getProcessModelSimilarityValue());
-				statement.addBatch();
+				if (row.getProcessModelSimilarityValue() >= Properties.MIN_SIMILARITY) {
+					statement.setString(1, row.getSubjectProcessModelId());
+					statement.setString(2, row.getObjectProcessModelId());
+					statement.setDouble(3, row.getProcessModelSimilarityValue());
+					statement.setDouble(4, row.getProcessModelSimilarityValue());
+					statement.addBatch();
+				}
 			}
 
 			batchResults = statement.executeBatch();

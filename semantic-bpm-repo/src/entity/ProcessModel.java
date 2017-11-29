@@ -15,6 +15,12 @@ public class ProcessModel {
 		this.modelFile = modelFile;
 		this.modelId = modelId;
 	}
+	
+	public ProcessModel(String modelFile, String modelId) {
+		super();
+		this.modelFile = modelFile;
+		this.modelId = modelId;
+	}
 
 	public String getProcessId() {
 		return processId;

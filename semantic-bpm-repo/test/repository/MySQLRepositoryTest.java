@@ -12,7 +12,7 @@ import org.junit.Test;
 import entity.ProcessModelSimilarity;
 
 public class MySQLRepositoryTest {
-	private IRepository repository = null;
+	private IDatabaseRepository repository = null;
 
 	@Test
 	public void testGetProcessModelFile() {
@@ -42,5 +42,13 @@ public class MySQLRepositoryTest {
 		final int actual = repository.getSimilarProcessModels(modelId).size();
 		final int expected = 3;
 		assertEquals("Should returl list of 3 similar models to model set by ID", expected, actual);
+	}
+
+	@Test
+	public void testGetProcessModelFiles() {
+		repository = new MySQLRepository();
+		final int actual = repository.getProcessModelFiles().size();
+		final int expected = 6;
+		assertEquals("Should returl list of 6 model files", expected, actual);
 	}
 }
