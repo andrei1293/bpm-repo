@@ -119,6 +119,10 @@ app.controller("modelPageController", function($scope) {
 
     $scope.modelEnhancement = responseRecomm;
 
+    if (responseRecomm == null) {
+        $('#enhancementRecommendations').hide();
+    }
+
     var responseSimilarity = null;
 
     $.ajax({
