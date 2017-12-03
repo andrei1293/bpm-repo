@@ -37,7 +37,13 @@ public abstract class SimilarityService {
 
 		for (ProcessModel processModel : processModelFiles) {
 			Model model = ModelFactory.createDefaultModel();
-			model.read(Properties.MODELS_PATH + "\\" + processModel.getModelFile().replace("xpdl", "nt"), "N-TRIPLES");
+
+			if (Properties.NATIVE_MODELS) {
+				model.read(Properties.MODELS_PATH + "\\" + processModel.getModelFile(), "N-TRIPLES");
+			} else {
+				model.read(Properties.MODELS_PATH + "\\" + processModel.getModelFile().replace("xpdl", "nt"),
+						"N-TRIPLES");
+			}
 			semanticRepository.store(processModel.getModelId(), model);
 		}
 
